@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/mName"
+        android:layout_alignBottom="@+id/mName"
+        android:layout_alignParentStart="true"
+        android:text="Name:" />
+
+    <TextView
+        android:id="@+id/mName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/mId"
+        android:text="TextView"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/mId"
+        android:layout_alignBottom="@+id/mId"
+        android:layout_alignParentStart="true"
+        android:text="ID: " />
+
+    <TextView
+        android:id="@+id/mId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mName"
+        android:layout_toEndOf="@+id/tMaxLength"
+        android:text="TextView"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tAvail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/mAvailability"
+        android:layout_alignBottom="@+id/mAvailability"
+        android:layout_alignParentStart="true"
+        android:text="Availability: " />
+
+    <TextView
+        android:id="@+id/mAvailability"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/mId"
+        android:layout_below="@+id/tNumber"
+        android:text="TextView"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tMinLength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/mMinLength"
+        android:layout_alignBottom="@+id/mMinLength"
+        android:layout_alignParentStart="true"
+        android:text="Min Reserve:" />
+
+    <TextView
+        android:id="@+id/mMinLength"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/mAvailability"
+        android:layout_below="@+id/mAvailability"
+        android:text="TextView"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tMaxLength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/mMaxResLength"
+        android:layout_alignBottom="@+id/mMaxResLength"
+        android:layout_alignParentStart="true"
+        android:text="Max Reservation:" />
+
+    <TextView
+        android:id="@+id/mMaxResLength"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/mMinLength"
+        android:layout_below="@+id/tMinLength"
+        android:text="TextView"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/mCostPerMin"
+        android:layout_alignBottom="@+id/mCostPerMin"
+        android:layout_alignParentStart="true"
+        android:text="Price per Min: " />
+
+    <TextView
+        android:id="@+id/mCostPerMin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/mMaxResLength"
+        android:layout_below="@+id/mMaxResLength"
+        android:text="TextView"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/mTimeBook"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mCostPerMin"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"
+        android:ems="10"
+        android:hint="Enter Reservation length"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/btnSendRes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mTimeBook"
+        android:layout_centerHorizontal="true"
+        android:text="Send Reservation" />
+
+</RelativeLayout>
