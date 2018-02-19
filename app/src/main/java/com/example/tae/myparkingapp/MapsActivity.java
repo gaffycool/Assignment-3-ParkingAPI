@@ -1,7 +1,9 @@
 package com.example.tae.myparkingapp;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -112,7 +114,8 @@ public class MapsActivity extends FragmentActivity implements
        // mMap.setOnMyLocationClickListener((GoogleMap.OnMyLocationClickListener) this);
         //mMap.setOnMarkerClickListener(this::onMarkerClick);
         enableMyLocation();
-        getAllParking(); //to get all the parking available
+      //  getAllParking(); //to get all the parking available
+
 
 
     }
@@ -228,6 +231,9 @@ public class MapsActivity extends FragmentActivity implements
                         reserved = "Space Available";
                         btnSendRes.setVisibility(View.VISIBLE);
                         mTimeBook.setVisibility(View.VISIBLE);
+
+                       // btnSendRes.getText().toString();
+
                     }
                     else if (location.getIsReserved()==true)
                     {
@@ -239,7 +245,7 @@ public class MapsActivity extends FragmentActivity implements
                     mName.setText(location.getName());
                     mId.setText(location.getId().toString());
                     mMin.setText(location.getMinReserveTimeMins().toString() + " Minutes");
-                    mMax.setText(location.getMaxReserveTimeMins().toString() + "Minutes");
+                    mMax.setText(location.getMaxReserveTimeMins().toString() + " Minutes");
                     mCost.setText("$" + location.getCostPerMinute().toString());
                     mAvailability.setText(reserved);
 
@@ -249,6 +255,30 @@ public class MapsActivity extends FragmentActivity implements
         }
     }
 
+    //Alert after sending request
+    public void AlertNetwork()
+    {
+        AlertDialog.Builder a_builder = new AlertDialog.Builder(MapsActivity.this);
+        a_builder.setMessage("Parking request has been sent to the server!")
+                .setCancelable(false)
+                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        MapsActivity.this.finish();
+                    }
+                }).setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+                //displayClassicMusic();
+
+            }
+        });
+
+        AlertDialog alert = a_builder.create();
+        alert.setTitle("Parking Confirmed!");
+        alert.show();
+    }
     //for the markers success
     @Override
     public void onFetchDataSuccess(List<Parking> parking) {

@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "4537974820",
+    "firebase_url": "https://fir-demo-8e2d7.firebaseio.com",
+    "project_id": "fir-demo-8e2d7",
+    "storage_bucket": "fir-demo-8e2d7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4537974820:android:d1303df9a6fd608f",
+        "android_client_info": {
+          "package_name": "com.example.tae.myfirebaseapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "4537974820-gnlnhufo94t52n8ocdtia5kjko3kips8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBphlQg3_SCewwp9kTZC6XsnzKwWAc_7JM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4537974820:android:4732284b106eba89",
+        "android_client_info": {
+          "package_name": "com.example.tae.mymappy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "4537974820-gnlnhufo94t52n8ocdtia5kjko3kips8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBphlQg3_SCewwp9kTZC6XsnzKwWAc_7JM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
