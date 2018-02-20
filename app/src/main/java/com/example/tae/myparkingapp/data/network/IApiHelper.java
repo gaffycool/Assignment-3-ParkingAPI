@@ -13,9 +13,9 @@ import io.reactivex.Observable;
 
 public interface IApiHelper {
 
-    Observable<List<Parking>> getMarkers();
+   // Observable<List<Parking>> getMarkers();
 
-    Observable<Location> getLocations(int id);
+    Observable<List<Parking>> getLocations();
 
-    Observable<Location> postReservation(int id);
+    Observable<Parking> postReservation(int id);
 }

@@ -6,13 +6,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,17 +23,14 @@ import com.example.tae.myparkingapp.data.network.model.Location;
 import com.example.tae.myparkingapp.data.network.model.Parking;
 import com.example.tae.myparkingapp.data.network.service.IRequestInterface;
 import com.example.tae.myparkingapp.data.network.service.ServiceConnection;
-import com.example.tae.myparkingapp.locations.ILocationMvpPresenter;
-import com.example.tae.myparkingapp.locations.ILocationMvpView;
-import com.example.tae.myparkingapp.locations.LocationPresenter;
 import com.example.tae.myparkingapp.parking.IParkingMvpPresenter;
 import com.example.tae.myparkingapp.parking.IParkingMvpView;
-import com.example.tae.myparkingapp.parking.MapInfoAdapter;
 import com.example.tae.myparkingapp.parking.ParkingPresenter;
 import com.example.tae.myparkingapp.ui.utils.rx.AppSchedulerProvider;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -41,82 +40,79 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
-import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class MapsActivity extends FragmentActivity implements
-        OnMapReadyCallback, IParkingMvpView, ILocationMvpView,
-        GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMarkerClickListener {
+        OnMapReadyCallback, IParkingMvpView,
+        GoogleMap.OnMyLocationButtonClickListener {
 
+
+    ParkingPresenter<IParkingMvpView> iParkingMvpPresenter;
+   //BitmapDescriptor defaultMarker;
+    //private String reserved;
     private GoogleMap mMap;
-    private IParkingMvpPresenter<MapsActivity> iParkingMvpPresenter;
-    private ILocationMvpPresenter<MapsActivity> iLocationMvpPresenter;
-    BitmapDescriptor defaultMarker;
-    private String reserved;
-
     //butterKnife
-  //  @BindView(R.id.mName) TextView mName;
-   // @BindView(R.id.mId) TextView mId;
-  //  @BindView(R.id.mMin) TextView mMin;
-  //  @BindView(R.id.mMax) TextView mMax;
-  //  @BindView(R.id.mCost) TextView mCost;
+    //  @BindView(R.id.mName) TextView mName;
+    // @BindView(R.id.mId) TextView mId;
+    //  @BindView(R.id.mMin) TextView mMin;
+    //  @BindView(R.id.mMax) TextView mMax;
+    //  @BindView(R.id.mCost) TextView mCost;
     // @BindView(R.id.mAvailability) TextView mAvailability;
 //   @BindView(R.id.btnSendRes) Button btnSendRes;
-  //  @BindView(R.id.mTimeBook) EditText mTimeBook;
-    TextView mName, mId, mMin, mMax, mCost, mAvailability;
-    Button btnSendRes;
+    //  @BindView(R.id.mTimeBook) EditText mTimeBook;
+ //   TextView mName, mId, mMin, mMax, mCost, mAvailability;
+//   Button btnSendRes;
 
+    private Context context;
+    //MapView mapView;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
-    private IRequestInterface iRequestInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //ButterKnife Binding
-      //  ButterKnife.bind(R.layout.info_window, this);
+        //  ButterKnife.bind(R.layout.info_window, this);
 
-        //presenter for the markers
-        this.iParkingMvpPresenter = new ParkingPresenter<>(new DataManager(),
-                new AppSchedulerProvider(), new CompositeDisposable());
-        this.iParkingMvpPresenter.onAttach(this);
-
-        //presenter for the location returned using id passed
-        this.iLocationMvpPresenter = new LocationPresenter<>(new DataManager(),
-                new AppSchedulerProvider(), new CompositeDisposable());
-        this.iLocationMvpPresenter.onAttach(this);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        //presenter for the markers
+        this.iParkingMvpPresenter = new ParkingPresenter<>(new DataManager(),
+                new AppSchedulerProvider(), new CompositeDisposable());
+        this.iParkingMvpPresenter.onAttach(this);
+        context = this;
+
 
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
 
+
+
         mMap = googleMap;
-        iParkingMvpPresenter.loadParking();
+
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.setTrafficEnabled(true);
         mMap.setOnMyLocationButtonClickListener(this);
-        mMap.setOnMarkerClickListener(this);
-       // mMap.setOnMyLocationClickListener((GoogleMap.OnMyLocationClickListener) this);
-        //mMap.setOnMarkerClickListener(this::onMarkerClick);
         enableMyLocation();
-      //  getAllParking(); //to get all the parking available
+        //iParkingMvpPresenter.loadParking();
+        // getAllParking(); //to get all the parking available
+        LatLng temp_ = new LatLng(37.773972, -122.431297);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(temp_, 12), 5000, null);
 
-
-
+        iParkingMvpPresenter.onViewPrepared();
+       //
     }
 
     /**
@@ -139,179 +135,42 @@ public class MapsActivity extends FragmentActivity implements
         return false;
     }
 
-    public void getAllParking() {
-
-        iRequestInterface = ServiceConnection.getConnection();
-
-
-        iRequestInterface.getMarkers()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<Parking>>() {
-                    @Override
-                    public void accept(List<Parking> parking) throws Exception {
-
-                        for (int i = 0; i < parking.size(); i++) {
-                            Parking parkingCheck = parking.get(i);
-
-                            LatLng temp_ = new LatLng(37.773972, -122.431297);
-
-                            LatLng pos = new LatLng(Double.valueOf(parkingCheck.getLat()), Double.valueOf(parkingCheck.getLng()));
-                            mMap.addMarker(new MarkerOptions()
-                                    .icon(defaultMarker)
-                                    .position(pos)
-                                    .zIndex(parkingCheck.getId()));
-                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(temp_, 12), 5000, null);
-
-                            if (parkingCheck.getIsReserved() == false) {
-                                defaultMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
-
-                            } else {
-                                defaultMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-                            }
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Toast.makeText(MapsActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-    }
-
-
-    public void reserveParking()
-    {
-        iRequestInterface = ServiceConnection.getConnection();
-
-    }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(marker.getPosition());
-        mMap.animateCamera(cameraUpdate);
-
-        iLocationMvpPresenter.loadLocation((int)marker.getZIndex());
-        return false;
-    }
-
-    @Override
-    public void onFetchDataProgress() {
-
-    }
-
-    //get the location details using the id passed
-    @Override
-    public void onFetchDataSuccess(Location location) {
-
-
-
-         //if map exists
-        if (mMap != null) {
-            mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                @Override
-                public View getInfoWindow(Marker marker) {
-                   return null;
-                }
-
-                @Override
-                public View getInfoContents(Marker marker) {
-                    View v = getLayoutInflater().inflate(R.layout.info_window, null);
-
-                    //ButterKnife Binding
-                    //ButterKnife.bind(R.layout.info_window, v);
-
-
-                    mName = v.findViewById(R.id.mName);
-                    mId = v.findViewById(R.id.mId);
-                    mMin = v.findViewById(R.id.mMinLength);
-                    mMax = v.findViewById(R.id.mMaxResLength);
-                    mCost = v.findViewById(R.id.mCostPerMin);
-                    mAvailability = v.findViewById(R.id.mAvailability);
-                    btnSendRes = v.findViewById(R.id.btnSendRes);
-                   // mTimeBook = v.findViewById(R.id.mTimeBook);
-
-                    if (location.getIsReserved()==false)
-                    {
-                        reserved = "Space Available";
-                        btnSendRes.setVisibility(View.VISIBLE);
-
-                    }
-                    else if (location.getIsReserved()==true)
-                    {
-                        reserved = "Space Taken";
-                        btnSendRes.setVisibility(View.GONE);
-                    }
-
-                    mName.setText(location.getName());
-                    mId.setText(location.getId().toString());
-                    mMin.setText(location.getMinReserveTimeMins().toString() + " Minutes");
-                    mMax.setText(location.getMaxReserveTimeMins().toString() + " Minutes");
-                    mCost.setText("$" + location.getCostPerMinute().toString());
-                    mAvailability.setText(reserved);
-
-                    return v;
-                }
-            });
-        }
-    }
-
-    //Alert after sending request
-    public void AlertNetwork()
-    {
-        AlertDialog.Builder a_builder = new AlertDialog.Builder(MapsActivity.this);
-        a_builder.setMessage("Parking request has been sent to the server!")
-                .setCancelable(false)
-                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        MapsActivity.this.finish();
-                    }
-                }).setNegativeButton("Close", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-                //displayClassicMusic();
-
-            }
-        });
-
-        AlertDialog alert = a_builder.create();
-        alert.setTitle("Parking Confirmed!");
-        alert.show();
-    }
-    //for the markers success
-    @Override
-    public void onFetchDataSuccess(List<Parking> parking) {
-
-        getAllParking();
-    }
 
     @Override
     public void onFetchDataError(String error) {
 
     }
 
-
     //For sending the request
     @Override
-    public void onFetchDataCompleted(Location location) {
+    public void onFetchDataCompleted(Parking parking) {
+        Toast.makeText(this, "You have reserved " + parking.getName() + " until " + parking.getIsReserved(), Toast.LENGTH_LONG).show();
 
+    }
 
+    @Override
+    public void onFetchDataCompleted(List<Parking> parking) {
+
+        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(parking));
 
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                iParkingMvpPresenter.onViewPrepared(location.getId());
+                iParkingMvpPresenter.onViewPrepared(parking.get(Integer.parseInt(marker.getTitle())).getId());
 
-                Toast.makeText(MapsActivity.this, "Reserved Parking", Toast.LENGTH_SHORT).show();
+                iParkingMvpPresenter.onViewPrepared();
             }
-
-            
         });
 
+       // mMap.clear();
+        for (int i = 0; i < parking.size(); i++) {
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(Double.parseDouble(parking.get(i).getLat()), Double.parseDouble(parking.get(i).getLng())))
+                    .title(String.valueOf(i))
+                    .icon(BitmapDescriptorFactory.defaultMarker((parking.get(i).getIsReserved()) ? BitmapDescriptorFactory.HUE_RED : BitmapDescriptorFactory.HUE_GREEN)));
+        }
     }
+
 
     @Override
     public void showLoading() {
@@ -357,4 +216,7 @@ public class MapsActivity extends FragmentActivity implements
     public void hideKeyboard() {
 
     }
+
+
+
 }

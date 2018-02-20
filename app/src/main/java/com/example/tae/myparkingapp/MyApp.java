@@ -11,6 +11,7 @@ public class MyApp extends Application {
 
     private static MyApp sInstance;
     private static Context context;
+    public static Application sApplication;
 
     public static MyApp getInstance() {
         if (sInstance == null) {
@@ -18,12 +19,18 @@ public class MyApp extends Application {
         }
         return sInstance;
     }
+    public static Application getApplication() {
+        return sApplication;
+    }
+    public static Context getContext() {
+        return getApplication().getApplicationContext();
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-
+        sApplication = this;
      //   configRealm();
 
     }

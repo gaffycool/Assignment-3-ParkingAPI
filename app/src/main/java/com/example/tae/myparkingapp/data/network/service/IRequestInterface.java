@@ -17,18 +17,18 @@ import retrofit2.http.Path;
 public interface IRequestInterface {
 
     //get request to get all the markers for parking
-    @GET(ApiList.GET_MARKERS)
-    Observable<List<Parking>> getMarkers();
+  //  @GET(ApiList.GET_MARKERS)
+  //  Observable<List<Parking>> getMarkers();
 
 
     //request to get details from id
     //@GET("/{id}")
     //Observable<Parking> getParkingDetails(@Path("id") int id, @Query("api_key") String apiKey);
     @GET(ApiList.LOCATION_DETAILS)
-    Observable<Location> getLocations(@Path("id") int id);
+    Observable<List<Parking>> getLocations();
 
     @POST(ApiList.RESERVE_URL)
-    Observable<Location> postReserveParking(@Path("id") int id);
+    Observable<Parking> postReserveParking(@Path("id") int id);
 
 
 }

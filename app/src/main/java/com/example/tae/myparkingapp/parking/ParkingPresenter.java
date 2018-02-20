@@ -1,5 +1,8 @@
 package com.example.tae.myparkingapp.parking;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import com.example.tae.myparkingapp.data.network.DataManager;
 import com.example.tae.myparkingapp.data.network.model.Location;
 import com.example.tae.myparkingapp.data.network.model.Parking;
@@ -25,16 +28,18 @@ public class ParkingPresenter <V extends IParkingMvpView>
         super(dataManager, schedulerProvider, compositeDisposable);
     }
 
-    @Override
+
+    //get all the markers and parking spots
+   /* @Override
     public void loadParking() {
-       getCompositeDisposable().add(
+        getCompositeDisposable().add(
                 getDataManager().getMarkers()
                         .subscribeOn(getSchedulerProvider().io())
                         .observeOn(getSchedulerProvider().ui())
                         .subscribe(new Consumer<List<Parking>>() {
                                        @Override
                                        public void accept(List<Parking> parking) throws Exception {
-                                           getMvpView().onFetchDataSuccess(parking);
+                                           getMvpView().onFetchDataCompleted(parking);
                                        }
                                    },
                                 new Consumer<Throwable>() {
@@ -44,7 +49,30 @@ public class ParkingPresenter <V extends IParkingMvpView>
                                     }
                                 })
         );
+    }*/
+
+    //to get the local parking spots
+    @Override
+    public void onViewPrepared() {
+
+        getCompositeDisposable()
+                .add(getDataManager().getLocations()
+                        .subscribeOn(getSchedulerProvider().io())
+                        .observeOn(getSchedulerProvider().ui())
+                        .subscribe(new Consumer<List<Parking>>() {
+                            @Override
+                            public void accept(List<Parking> parking) throws Exception {
+                                getMvpView().onFetchDataCompleted(parking);
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                Log.i("error", throwable.getMessage());
+                            }
+                        }));
+
     }
+
 
     @Override
     public void onViewPrepared(int id) {
@@ -53,16 +81,15 @@ public class ParkingPresenter <V extends IParkingMvpView>
                 .add(getDataManager().postReservation(id)
                         .subscribeOn(getSchedulerProvider().io())
                         .observeOn(getSchedulerProvider().ui())
-                        .subscribe(new Consumer<Location>() {
+                        .subscribe(new Consumer<Parking>() {
                             @Override
-                            public void accept(Location location) throws Exception {
-
-                                getMvpView().onFetchDataCompleted(location);
-
+                            public void accept(Parking parking) throws Exception {
+                                getMvpView().onFetchDataCompleted(parking);
                             }
                         }, new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable throwable) throws Exception {
+                                getMvpView().onError(throwable.getMessage());
 
                             }
                         }));

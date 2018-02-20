@@ -24,17 +24,18 @@ public class ApiHelper implements IApiHelper {
     }
 
     @Override
-    public Observable<Location> getLocations(int id)
+    public Observable<List<Parking>> getLocations()
     {
-        return iRequestInterface.getLocations(id);
+        return iRequestInterface.getLocations();
     }
+   // @Override
+  //  public Observable<List<Parking>> getMarkers()
+  //  {
+  //      return iRequestInterface.getMarkers();
+  //  }
+
     @Override
-    public Observable<List<Parking>> getMarkers()
-    {
-        return iRequestInterface.getMarkers();
-    }
-    @Override
-    public Observable<Location> postReservation(int id) {
+    public Observable<Parking> postReservation(int id) {
         return iRequestInterface.postReserveParking(id);
     }
 }

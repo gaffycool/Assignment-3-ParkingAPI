@@ -12,11 +12,12 @@ import java.util.List;
 
 public interface IParkingMvpView extends MvpView {
 
-    void onFetchDataProgress();
-    void onFetchDataSuccess(List<Parking> parking);
+    //for the parking locations
     void onFetchDataError(String error);
 
+    void onFetchDataCompleted(List<Parking> parking);
+
     //for the post reservation
-    void onFetchDataCompleted(Location location);
+    void onFetchDataCompleted(Parking parking);
 
 }
