@@ -22,15 +22,18 @@ public class DataManager implements IDataManager {
 
 
     @Override
-    public Observable<List<Parking>> getMarkers()
-    {
+    public Observable<List<Parking>> getMarkers() {
         return iApiHelper.getMarkers();
     }
 
     @Override
-    public Observable<Location> getLocations(int id)
-    {
+    public Observable<Location> getLocations(int id) {
         return iApiHelper.getLocations(id);
+    }
+
+    @Override
+    public Observable<Location> postReservation(int id) {
+        return iApiHelper.postReservation(id);
     }
 }
 

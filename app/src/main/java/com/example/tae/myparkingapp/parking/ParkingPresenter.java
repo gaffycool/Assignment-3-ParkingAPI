@@ -1,12 +1,14 @@
 package com.example.tae.myparkingapp.parking;
 
 import com.example.tae.myparkingapp.data.network.DataManager;
+import com.example.tae.myparkingapp.data.network.model.Location;
 import com.example.tae.myparkingapp.data.network.model.Parking;
 import com.example.tae.myparkingapp.ui.base.BasePresenter;
 import com.example.tae.myparkingapp.ui.utils.rx.SchedulerProvider;
 
 import java.util.List;
 
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 
@@ -42,5 +44,27 @@ public class ParkingPresenter <V extends IParkingMvpView>
                                     }
                                 })
         );
+    }
+
+    @Override
+    public void onViewPrepared(int id) {
+
+        getCompositeDisposable()
+                .add(getDataManager().postReservation(id)
+                        .subscribeOn(getSchedulerProvider().io())
+                        .observeOn(getSchedulerProvider().ui())
+                        .subscribe(new Consumer<Location>() {
+                            @Override
+                            public void accept(Location location) throws Exception {
+
+                                getMvpView().onFetchDataCompleted(location);
+
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+
+                            }
+                        }));
     }
 }

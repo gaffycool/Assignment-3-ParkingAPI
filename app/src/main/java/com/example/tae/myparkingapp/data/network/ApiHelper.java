@@ -33,5 +33,8 @@ public class ApiHelper implements IApiHelper {
     {
         return iRequestInterface.getMarkers();
     }
-
+    @Override
+    public Observable<Location> postReservation(int id) {
+        return iRequestInterface.postReserveParking(id);
+    }
 }

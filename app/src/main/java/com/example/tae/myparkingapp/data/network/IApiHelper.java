@@ -16,4 +16,6 @@ public interface IApiHelper {
     Observable<List<Parking>> getMarkers();
 
     Observable<Location> getLocations(int id);
+
+    Observable<Location> postReservation(int id);
 }

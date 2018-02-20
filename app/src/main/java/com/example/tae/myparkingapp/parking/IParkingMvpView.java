@@ -1,5 +1,6 @@
 package com.example.tae.myparkingapp.parking;
 
+import com.example.tae.myparkingapp.data.network.model.Location;
 import com.example.tae.myparkingapp.data.network.model.Parking;
 import com.example.tae.myparkingapp.ui.base.MvpView;
 
@@ -14,4 +15,8 @@ public interface IParkingMvpView extends MvpView {
     void onFetchDataProgress();
     void onFetchDataSuccess(List<Parking> parking);
     void onFetchDataError(String error);
+
+    //for the post reservation
+    void onFetchDataCompleted(Location location);
+
 }

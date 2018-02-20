@@ -71,7 +71,6 @@ public class MapsActivity extends FragmentActivity implements
   //  @BindView(R.id.mTimeBook) EditText mTimeBook;
     TextView mName, mId, mMin, mMax, mCost, mAvailability;
     Button btnSendRes;
-    EditText mTimeBook;
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
@@ -182,6 +181,11 @@ public class MapsActivity extends FragmentActivity implements
     }
 
 
+    public void reserveParking()
+    {
+        iRequestInterface = ServiceConnection.getConnection();
+
+    }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
@@ -201,12 +205,14 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onFetchDataSuccess(Location location) {
 
+
+
          //if map exists
         if (mMap != null) {
             mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                 @Override
                 public View getInfoWindow(Marker marker) {
-                    return null;
+                   return null;
                 }
 
                 @Override
@@ -224,22 +230,18 @@ public class MapsActivity extends FragmentActivity implements
                     mCost = v.findViewById(R.id.mCostPerMin);
                     mAvailability = v.findViewById(R.id.mAvailability);
                     btnSendRes = v.findViewById(R.id.btnSendRes);
-                    mTimeBook = v.findViewById(R.id.mTimeBook);
+                   // mTimeBook = v.findViewById(R.id.mTimeBook);
 
                     if (location.getIsReserved()==false)
                     {
                         reserved = "Space Available";
                         btnSendRes.setVisibility(View.VISIBLE);
-                        mTimeBook.setVisibility(View.VISIBLE);
-
-                       // btnSendRes.getText().toString();
 
                     }
                     else if (location.getIsReserved()==true)
                     {
                         reserved = "Space Taken";
                         btnSendRes.setVisibility(View.GONE);
-                        mTimeBook.setVisibility(View.GONE);
                     }
 
                     mName.setText(location.getName());
@@ -288,6 +290,26 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onFetchDataError(String error) {
+
+    }
+
+
+    //For sending the request
+    @Override
+    public void onFetchDataCompleted(Location location) {
+
+
+
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                iParkingMvpPresenter.onViewPrepared(location.getId());
+
+                Toast.makeText(MapsActivity.this, "Reserved Parking", Toast.LENGTH_SHORT).show();
+            }
+
+            
+        });
 
     }
 

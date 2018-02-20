@@ -8,4 +8,6 @@ import com.example.tae.myparkingapp.ui.base.MvpPresenter;
 
 public interface IParkingMvpPresenter <V extends IParkingMvpView> extends MvpPresenter<V> {
     void loadParking();
+
+    void onViewPrepared(int id);
 }

@@ -55,17 +55,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
         //custom notification View
-        RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.notifications);
+      //  RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.notifications);
         //remoteViews.setImageViewResource(R.id.image_icon, iconResource);
-        remoteViews.setTextViewText(R.id.tLine2, messageBody);
-        remoteViews.setTextViewText(R.id.tName, messageBody);
-
+       // remoteViews.setTextViewText(R.id.tLine2, messageBody);
+      //  remoteViews.setTextViewText(R.id.tName, messageBody);
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("Assignment 3 - Parking API")
-                .setCustomContentView(remoteViews)
+           //     .setCustomContentView(remoteViews)
                 .setContentText(messageBody)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)

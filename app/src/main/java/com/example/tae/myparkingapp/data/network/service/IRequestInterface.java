@@ -7,6 +7,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 /**
@@ -25,6 +26,9 @@ public interface IRequestInterface {
     //Observable<Parking> getParkingDetails(@Path("id") int id, @Query("api_key") String apiKey);
     @GET(ApiList.LOCATION_DETAILS)
     Observable<Location> getLocations(@Path("id") int id);
+
+    @POST(ApiList.RESERVE_URL)
+    Observable<Location> postReserveParking(@Path("id") int id);
 
 
 }
